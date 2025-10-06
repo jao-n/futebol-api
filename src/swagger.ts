@@ -20,11 +20,16 @@ const options = {
   apis: ["./src/routes/*.ts"], // Onde encontrar os comentários JSDoc
 };
 
-// Gera a especificação Swagger a partir dos comentários
+// Gera a especificação Swagger (OpenAPI) a partir dos comentários
 const specs = swaggerJsdoc(options);
 
 // Função para configurar o Swagger na aplicação Express
 export const setupSwagger = (app: Express) => {
   // Rota /docs serve a interface do Swagger UI
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
+
+  // Expor o JSON do OpenAPI em endpoints úteis para download/import
+  // /openapi.json e /docs.json retornam a especificação gerada
+  app.get("/openapi.json", (_req, res) => res.json(specs));
+  app.get("/docs.json", (_req, res) => res.json(specs));
 };

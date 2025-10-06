@@ -13,8 +13,8 @@ export const validateBody = (schema: z.ZodType<any>) => {
       if (error instanceof ZodError) {
         // Se for erro de validação Zod, retorna erro 400 com detalhes
         return res.status(400).json({
-          message: "Dados de entrada inválidos",
-          errors: error.issues.map((err) => ({
+          mensagem: "Dados de entrada inválidos",
+          erros: error.issues.map((err) => ({
             campo: err.path.join("."), // Caminho do campo com erro
             mensagem: err.message,      // Mensagem de erro
           })),
@@ -35,8 +35,8 @@ export const validateParams = (schema: z.ZodType<any>) => {
     } catch (error) {
       if (error instanceof ZodError) {
         return res.status(400).json({
-          message: "Parâmetros inválidos",
-          errors: error.issues.map((err) => ({
+          mensagem: "Parâmetros inválidos",
+          erros: error.issues.map((err) => ({
             campo: err.path.join("."),
             mensagem: err.message,
           })),
@@ -57,8 +57,8 @@ export const validateQuery = (schema: z.ZodType<any>) => {
     } catch (error) {
       if (error instanceof ZodError) {
         return res.status(400).json({
-          message: "Parâmetros de consulta inválidos",
-          errors: error.issues.map((err) => ({
+          mensagem: "Parâmetros de consulta inválidos",
+          erros: error.issues.map((err) => ({
             campo: err.path.join("."),
             mensagem: err.message,
           })),

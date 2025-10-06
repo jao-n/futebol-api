@@ -17,9 +17,19 @@ export const createEscalacao = async (req: Request, res: Response) => {
     return res.status(201).json(nova);
   } catch (error: any) {
     // Se for erro de validação Zod, retorna 400
-    if (error.errors) return res.status(400).json({ errors: error.errors });
-    // Outros erros retornam 500
-    return res.status(500).json({ message: error.message });
+    // Se for erro de validação do Zod, retorna 400 com os detalhes
+    if (error.errors) return res.status(400).json({ erros: error.errors });
+
+    // Erro de chave estrangeira do Prisma (IDs inválidos)
+    if (error?.code === "P2003")
+  return res.status(400).json({ mensagem: "Violação de chave estrangeira", detalhe: error.message });
+
+    // Caso genérico de registro não encontrado (ex.: update/delete em registro inexistente)
+    if (error?.code === "P2025")
+  return res.status(404).json({ mensagem: "Registro não encontrado", detalhe: error.message });
+
+    // Outros erros retornam 500 com a mensagem original para debug
+    return res.status(500).json({ mensagem: error.message });
   }
 };
 
@@ -42,13 +52,13 @@ export const getEscalacaoById = async (req: Request, res: Response) => {
     const escalacao = await escalacaoService.getById(id);
     
     // Se escalação não foi encontrada, retorna 404
-    if (!escalacao) return res.status(404).json({ message: "Escalação não encontrada" });
+    if (!escalacao) return res.status(404).json({ mensagem: "Escalação não encontrada" });
     
     // Retorna a escalação encontrada
     return res.json(escalacao);
   } catch (error: any) {
-    if (error.errors) return res.status(400).json({ errors: error.errors });
-    return res.status(500).json({ message: error.message });
+    if (error.errors) return res.status(400).json({ erros: error.errors });
+    return res.status(500).json({ mensagem: error.message });
   }
 };
 
@@ -61,11 +71,11 @@ export const updateEscalacao = async (req: Request, res: Response) => {
     const atualizado = await escalacaoService.update(id, payload);
     return res.json(atualizado);
   } catch (error: any) {
-    if (error.errors) return res.status(400).json({ errors: error.errors });
+    if (error.errors) return res.status(400).json({ erros: error.errors });
     // Erro específico do Prisma quando registro não existe
     if (error.code === "P2025")
-      return res.status(404).json({ message: "Escalação não encontrada" });
-    return res.status(500).json({ message: error.message });
+      return res.status(404).json({ mensagem: "Escalação não encontrada" });
+    return res.status(500).json({ mensagem: error.message });
   }
 };
 
@@ -78,7 +88,7 @@ export const deleteEscalacao = async (req: Request, res: Response) => {
     return res.status(204).send();
   } catch (error: any) {
     if (error.code === "P2025")
-      return res.status(404).json({ message: "Escalação não encontrada" });
-    return res.status(500).json({ message: error.message });
+      return res.status(404).json({ mensagem: "Escalação não encontrada" });
+    return res.status(500).json({ mensagem: error.message });
   }
 };

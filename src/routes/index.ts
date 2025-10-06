@@ -3,6 +3,7 @@ import timeRoutes from "./timeRoutes";
 import jogadorRoutes from "./jogadorRoutes";
 import partidaRoutes from "./partidaRoutes";
 import escalacaoRoutes from "./escalacaoRoutes";
+import healthRoutes from "./healthRoutes";
 
 const router = Router();
 
@@ -18,5 +19,8 @@ router.use("/partidas", partidaRoutes);
 
 // Rotas de escalações: /api/escalacoes
 router.use("/escalacoes", escalacaoRoutes);
+
+// Health check: /api/health
+router.use("/health", healthRoutes);
 
 export default router;
