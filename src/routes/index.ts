@@ -6,10 +6,17 @@ import escalacaoRoutes from "./escalacaoRoutes";
 
 const router = Router();
 
-// Se quiser prefixo /api:
+// CONFIGURAÇÃO DAS ROTAS PRINCIPAIS DA API
+// Todas as rotas de times começam com /api/times
 router.use("/times", timeRoutes);
+
+// Rotas de jogadores: /api/jogadores
 router.use("/jogadores", jogadorRoutes);
+
+// Rotas de partidas: /api/partidas
 router.use("/partidas", partidaRoutes);
+
+// Rotas de escalações: /api/escalacoes
 router.use("/escalacoes", escalacaoRoutes);
 
 export default router;
